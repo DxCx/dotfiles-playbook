@@ -1,0 +1,3 @@
+---
+  - name: Installing VIM
+    action: "{{ ansible_pkg_mgr }} pkg=gvim state=present"

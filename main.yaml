@@ -6,7 +6,7 @@
 ---
 - name: apply common configuration to all nodes
   hosts: all
-  user: root
+  gather_facts: yes
 
   roles:
-    - common
+    - vim
