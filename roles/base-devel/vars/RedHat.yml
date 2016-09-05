@@ -1,0 +1,7 @@
+---
+
+  packages:
+    - gcc
+    - make
+    - automake
+    - gcc-c++

@@ -1,0 +1,60 @@
+---
+
+  - name: 'Including OS/Daemon Specific Variables'
+    include_vars: '{{ item }}'
+    debug: msg="{{ ansible_distribution }} - {{ ansible_os_family }}"
+    with_first_found:
+      - "{{ ansible_distribution }}.yml"
+      - "{{ ansible_os_family }}.yml"
+
+  # Debian based
+  # @link http://docs.ansible.com/apt_module.html
+
+  - name: Ensuring build packages (Debian based).
+    apt: name={{ item }} state=latest update_cache=yes cache_valid_time=86400
+    with_items: "{{base_devel_packages}}"
+    when: ansible_os_family == 'Debian'
+
+  - name: Ensuring package install (Debian based).
+    apt: name={{ item.name }} state={{ item.state | default('latest') }} update_cache=yes cache_valid_time=86400
+    with_items: "{{base_devel_packages_additional}}"
+    when: ansible_os_family == 'Debian'
+
+  # RedHat based
+  # @link http://docs.ansible.com/yum_module.html
+
+  - name: Ensuring build packages (RedHat based).
+    yum: name={{ item }} state=latest update_cache=yes
+    with_items: "{{base_devel_packages}}"
+    when: ansible_os_family == 'RedHat'
+
+  - name: Ensuring package install (Debian based).
+    yum: name={{ item.name }} state={{ item.state | default('latest') }} update_cache=yes
+    with_items: "{{base_devel_packages_additional}}"
+    when: ansible_os_family == 'RedHat'
+
+  # Gentoo
+  # @link http://docs.ansible.com/portage_module.html
+
+  - name: Ensuring build packages (Gentoo).
+    portage: name={{ item }} state=latest update=yes sync=yes
+    with_items: "{{base_devel_packages}}"
+    when: ansible_os_family == 'Gentoo'
+
+  - name: Ensuring package install (Debian based).
+    portage: name={{ item.name }} state={{ item.state | default('latest') }} update=yes sync=yes
+    with_items: "{{base_devel_packages_additional}}"
+    when: ansible_os_family == 'Gentoo'
+
+  # Arch
+  # @link http://docs.ansible.com/pacman_module.html
+
+  - name: Ensuring build packages (Arch).
+    pacman: name={{ item }} state=latest update_cache=yes
+    with_items: "{{base_devel_packages}}"
+    when: ansible_os_family == 'Arch'
+
+  - name: Ensuring package install (Debian based).
+    pacman: name={{ item.name }} state={{ item.state | default('latest') }} update_cache=yes
+    with_items: "{{base_devel_packages_additional}}"
+    when: ansible_os_family == 'Arch'

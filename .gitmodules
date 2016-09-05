@@ -1,0 +1,3 @@
+[submodule "roles/base-devel"]
+	path = roles/base-devel
+	url = https://github.com/dragoscirjan/ansible-role-repo-base-devel.git
